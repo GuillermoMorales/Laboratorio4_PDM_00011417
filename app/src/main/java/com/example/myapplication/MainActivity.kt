@@ -5,6 +5,8 @@ import android.os.AsyncTask
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.Snackbar
+import android.support.v7.widget.LinearLayoutManager
+import com.example.myapplication.Adapters.MovieAdapter
 import com.example.myapplication.model.movie
 import com.example.myapplication.utils.NetworkUtils
 import com.google.gson.Gson
@@ -15,10 +17,40 @@ import java.net.URL
 
 class MainActivity : AppCompatActivity() {
 
+    private var movieList : ArrayList<movie> = ArrayList()
+    private lateinit var movieAdapter: MovieAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        initRecylerView()
+        initSearchBar()
     }
+
+    fun initRecylerView()
+    {
+        var viewManager = LinearLayoutManager(this)
+        var movieAdapter = MovieAdapter(movieList)
+
+        movie_list_rv.apply {
+            setHasFixedSize(true)
+            layoutManager = viewManager
+            adapter = movieAdapter
+        }
+    }
+    fun initSearchBar() = add_movie_btn.setOnClickListener{
+        if(!movie_name_et.text.isEmpty())
+        {
+            FetchMovie().execute(movie_name_et.text.toString())
+        }
+    }
+
+    fun addMovieToList(movie:movie)
+    {
+        movieList.add(movie)
+        movieAdapter.changeList(movieList)
+    }
+
     private inner class FetchMovie: AsyncTask<String, Void, String>()
     {
         override fun doInBackground(vararg params: String): String {
@@ -42,6 +74,7 @@ class MainActivity : AppCompatActivity() {
                 if(movieJson.getString("Response")=="True")
                 {
                     val movie = Gson().fromJson<movie>(movieInfo, Movie::class.java)
+                    addMovieToList(movie)
 
                 }
                 else

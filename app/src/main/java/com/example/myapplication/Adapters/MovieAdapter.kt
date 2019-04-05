@@ -16,13 +16,19 @@ class MovieAdapter(var noives : List<movie>):RecyclerView.Adapter<MovieAdapter.V
         return ViewHolder(view)
     }
 
-    override fun getItemCount(): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+    override fun getItemCount(): Int = noives.size
+
+
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) = holder.bind(noives[position])
+
+    fun changeList(noives:List<movie>)
+    {
+        this.noives = noives
+        notifyDataSetChanged()
     }
 
-    override fun onBindViewHolder(p0: ViewHolder, p1: Int) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+
 
     class ViewHolder(itemView:View):RecyclerView.ViewHolder(itemView){
         fun bind(movie: movie) = with(itemView)

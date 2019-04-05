@@ -37,11 +37,11 @@ class NetworkUtils{
                 scanner.next()
             }else
             {
-
+                ""
             }
 
         }finally {
-            url
+            urlConnection.disconnect()
         }
     }
 
